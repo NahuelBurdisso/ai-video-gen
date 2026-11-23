@@ -1,0 +1,25 @@
+services:
+  comfyui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-video-gen
+    ports:
+      - "8188:8188"
+    volumes:
+      - D:/ai-models:/models
+      - D:/ai-output:/output
+      - D:/ai-input:/input
+    shm_size: '8g'
+    restart: unless-stopped
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - SKIP_DOWNLOAD=${SKIP_DOWNLOAD:-0}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

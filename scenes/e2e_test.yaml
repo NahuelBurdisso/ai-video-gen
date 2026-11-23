@@ -1,0 +1,16 @@
+negative_prompt: blurry, low quality, distorted
+scenes:
+- duration: 5
+  prompt: A white cat walking on a golden beach at sunset, cinematic, soft light
+settings:
+  cfg: 6.0
+  fps: 16
+  frames_per_clip: 33
+  resolution:
+  - 832
+  - 480
+  seed: 42
+  shift: 5.0
+  steps: 10
+  timeout_per_clip: 600
+title: e2e_test

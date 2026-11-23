@@ -1,0 +1,17 @@
+title: "test_t2v_pipeline"
+
+settings:
+  resolution: [832, 480]
+  frames_per_clip: 33
+  steps: 15
+  cfg: 6.0
+  shift: 5.0
+  seed: 42
+  fps: 16
+  timeout_per_clip: 900
+
+scenes:
+  - prompt: "A beautiful sunset over calm ocean waves, golden hour, cinematic 4k"
+    duration: 2
+
+negative_prompt: "blurry, low quality, distorted, ugly"

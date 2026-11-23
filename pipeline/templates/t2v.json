@@ -1,0 +1,52 @@
+{
+  "1": {
+    "class_type": "CLIPLoaderGGUF",
+    "inputs": {"clip_name": "umt5-xxl-Q5.gguf", "type": "wan"}
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "{{prompt}}", "clip": ["1", 0]}
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "{{negative_prompt}}", "clip": ["1", 0]}
+  },
+  "4": {
+    "class_type": "WanVideoModelLoader",
+    "inputs": {"model": "wan2.2-t2v-14B-Q5_K_M.gguf", "base_precision": "bf16", "quantization": "disabled", "load_device": "offload_device"}
+  },
+  "5": {
+    "class_type": "WanVideoVAELoader",
+    "inputs": {"model_name": "wan2.2-vae.safetensors", "precision": "bf16"}
+  },
+  "6": {
+    "class_type": "WanVideoEmptyEmbeds",
+    "inputs": {"width": "{{width}}", "height": "{{height}}", "num_frames": "{{num_frames}}"}
+  },
+  "7": {
+    "class_type": "WanVideoTextEmbedBridge",
+    "inputs": {"positive": ["2", 0], "negative": ["3", 0]}
+  },
+  "11": {
+    "class_type": "WanVideoTeaCache",
+    "inputs": {
+      "rel_l1_thresh": 0.08,
+      "start_step": 1,
+      "end_step": -1,
+      "cache_device": "offload_device",
+      "use_coefficients": true
+    }
+  },
+  "8": {
+    "class_type": "WanVideoSampler",
+    "inputs": {"model": ["4", 0], "image_embeds": ["6", 0], "text_embeds": ["7", 0], "steps": "{{steps}}", "cfg": "{{cfg}}", "shift": "{{shift}}", "seed": "{{seed}}", "force_offload": true, "scheduler": "unipc", "riflex_freq_index": 0, "cache_args": ["11", 0]}
+  },
+  "9": {
+    "class_type": "WanVideoDecode",
+    "inputs": {"vae": ["5", 0], "samples": ["8", 0], "enable_vae_tiling": false, "tile_x": 272, "tile_y": 272, "tile_stride_x": 144, "tile_stride_y": 128}
+  },
+  "10": {
+    "class_type": "VHS_VideoCombine",
+    "inputs": {"images": ["9", 0], "frame_rate": 16, "loop_count": 0, "filename_prefix": "{{filename_prefix}}", "format": "video/h264-mp4", "pingpong": false, "save_output": true}
+  }
+}
